@@ -1,0 +1,109 @@
+@model Nop.Plugin.Widgets.NopwaraSearch.Models.ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="NopwaraSearchAdmin" asp-action="Configure" method="post">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-default">
+                <div class="card-body">
+                    <p>@T("Plugins.Widgets.NopwaraSearch.Instructions")</p>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="AllowedThemes" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="AllowedThemes" />
+                            <span asp-validation-for="AllowedThemes"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ShowPrices" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowPrices" />
+                            <span asp-validation-for="ShowPrices"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ShowCategories" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowCategories" />
+                            <span asp-validation-for="ShowCategories"></span>
+                        </div>
+                    </div>
+                    <nop-nested-setting asp-for="ShowCategories">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="MaxCategories" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="MaxCategories" />
+                                <span asp-validation-for="MaxCategories"></span>
+                            </div>
+                        </div>
+                    </nop-nested-setting>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ShowManufacturers" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowManufacturers" />
+                            <span asp-validation-for="ShowManufacturers"></span>
+                        </div>
+                    </div>
+                    <nop-nested-setting asp-for="ShowManufacturers">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="MaxManufacturers" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="MaxManufacturers" />
+                                <span asp-validation-for="MaxManufacturers"></span>
+                            </div>
+                        </div>
+                    </nop-nested-setting>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ShowPopularTerms" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowPopularTerms" />
+                            <span asp-validation-for="ShowPopularTerms"></span>
+                        </div>
+                    </div>
+                    <nop-nested-setting asp-for="ShowPopularTerms">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="NumberOfPopularTerms" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="NumberOfPopularTerms" />
+                                <span asp-validation-for="NumberOfPopularTerms"></span>
+                            </div>
+                        </div>
+                    </nop-nested-setting>
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DebounceMs" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DebounceMs" />
+                            <span asp-validation-for="DebounceMs"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-9 offset-md-3">
+                            <input type="submit" name="save" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
