@@ -5,7 +5,7 @@ using Nop.Core.Infrastructure;
 using Nop.Plugin.Widgets.NopwaraSearch.Models;
 using Nop.Web.Framework.Components;
 using Nop.Web.Framework.Mvc.Routing;
-using Nop.Services.Themes;
+using Nop.Web.Framework.Themes;
 
 namespace Nop.Plugin.Widgets.NopwaraSearch.Components;
 
@@ -56,11 +56,11 @@ public class NopwaraSearchViewComponent : NopViewComponent
         var model = new PublicInfoModel
         {
             SuggestUrl = _nopUrlHelper.RouteUrl(NopwaraSearchDefaults.SUGGEST_ROUTE_NAME),
-            DeleteTermUrl = _nopUrlHelper.RouteUrl(NopRouteNames.Ajax.DELETE_PRODUCT_SEARCH_TERMS),
             MinTermLength = Math.Max(1, _catalogSettings.ProductSearchTermMinimumLength),
             DebounceMs = Math.Max(0, _settings.DebounceMs),
             ShowImages = _catalogSettings.ShowProductImagesInSearchAutoComplete,
-            ShowSearchHistory = _catalogSettings.ShowSearchTermHistory
+            //nopCommerce 4.90 keeps no per-customer search history
+            ShowSearchHistory = false
         };
 
         //themes can override the view at Themes/{theme}/Views/Plugins/NopwaraSearch/PublicInfo.cshtml

@@ -31,7 +31,6 @@ public class NopwaraSearchController : BasePublicController
     private readonly IProductModelFactory _productModelFactory;
     private readonly IProductService _productService;
     private readonly IRepository<SearchTerm> _searchTermRepository;
-    private readonly ISearchTermService _searchTermService;
     private readonly IStaticCacheManager _staticCacheManager;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
@@ -50,7 +49,6 @@ public class NopwaraSearchController : BasePublicController
         IProductModelFactory productModelFactory,
         IProductService productService,
         IRepository<SearchTerm> searchTermRepository,
-        ISearchTermService searchTermService,
         IStaticCacheManager staticCacheManager,
         IStoreContext storeContext,
         IWorkContext workContext,
@@ -65,7 +63,6 @@ public class NopwaraSearchController : BasePublicController
         _productModelFactory = productModelFactory;
         _productService = productService;
         _searchTermRepository = searchTermRepository;
-        _searchTermService = searchTermService;
         _staticCacheManager = staticCacheManager;
         _storeContext = storeContext;
         _workContext = workContext;
@@ -89,13 +86,11 @@ public class NopwaraSearchController : BasePublicController
 
         return await _staticCacheManager.GetAsync(cacheKey, async () =>
         {
-            //core ISearchTermService.GetStatsAsync counts every store together
+            //core ISearchTermService.GetStatsAsync counts every store together; 4.90 keeps one row per keyword and store with a Count
             var query = _searchTermRepository.Table
-                .Where(term => term.StoreId == storeId && !term.Deleted)
-                .GroupBy(term => term.Keyword)
-                .Select(group => new { Keyword = group.Key, Count = group.Count() })
-                .OrderByDescending(line => line.Count)
-                .Select(line => line.Keyword);
+                .Where(term => term.StoreId == storeId)
+                .OrderByDescending(term => term.Count)
+                .Select(term => term.Keyword);
 
             return (IList<string>)(await query.ToPagedListAsync(0, _settings.NumberOfPopularTerms)).ToList();
         });
@@ -117,15 +112,9 @@ public class NopwaraSearchController : BasePublicController
         var term = q?.Trim() ?? string.Empty;
         var searchUrl = _nopUrlHelper.RouteUrl(NopRouteNames.General.SEARCH);
 
-        //empty box: recent searches of this customer + popular searches
+        //empty box: popular searches (nopCommerce 4.90 keeps no per-customer search history, so "recent" stays empty)
         if (term.Length == 0)
-        {
-            var recent = _catalogSettings.ShowSearchTermHistory
-                ? (await _searchTermService.SearchTermHistoryItemsAsync((await _workContext.GetCurrentCustomerAsync()).Id, store.Id)).ToList()
-                : [];
-
-            return Json(new { term, recent, popular = await GetPopularTermsAsync(store.Id), products = Array.Empty<object>(), categories = Array.Empty<object>(), manufacturers = Array.Empty<object>(), totalCount = 0, searchUrl });
-        }
+            return Json(new { term, recent = Array.Empty<string>(), popular = await GetPopularTermsAsync(store.Id), products = Array.Empty<object>(), categories = Array.Empty<object>(), manufacturers = Array.Empty<object>(), totalCount = 0, searchUrl });
 
         if (term.Length < _catalogSettings.ProductSearchTermMinimumLength)
             return Json(new { term, tooShort = true });

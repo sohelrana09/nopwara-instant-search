@@ -3,7 +3,7 @@
   "FriendlyName": "Nopwara instant search",
   "SystemName": "Widgets.NopwaraSearch",
   "Version": "1.00",
-  "SupportedVersions": [ "5.00" ],
+  "SupportedVersions": [ "4.90" ],
   "Author": "Nopwara",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Widgets.NopwaraSearch.dll",
