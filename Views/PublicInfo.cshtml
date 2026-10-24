@@ -1,8 +1,9 @@
 @model PublicInfoModel
 
 @{
-    //head script: its alpine:init listener must exist before Alpine (a footer script) starts, whatever the footer order / bundling
-    NopHtml.AppendScriptParts(ResourceLocation.Head, $"~/Plugins/{NopwaraSearchDefaults.PLUGIN_FOLDER}/Content/js/nopwara-search.js");
+    //footer, not <head> (render-blocking): the theme adds Alpine as the last footer script (Nopwara's Head.cshtml), so this
+    //script's alpine:init listener is registered before Alpine starts. Themes listed in the plugin's "allowed themes" must do the same.
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Plugins/{NopwaraSearchDefaults.PLUGIN_FOLDER}/Content/js/nopwara-search.js");
 }
 
 @*
