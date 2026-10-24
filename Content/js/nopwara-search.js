@@ -86,7 +86,9 @@ document.addEventListener('alpine:init', () => {
     },
 
     escape(text) {
-      return String(text ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      //a named map, not ({ ... }[c]): nopCommerce 4.90's JS minifier drops those parentheses, which breaks the whole script bundle
+      const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+      return String(text ?? '').replace(/[&<>"']/g, (c) => entities[c]);
     },
 
     //match on the raw text and escape each piece (matching escaped text would split entities such as &amp;)

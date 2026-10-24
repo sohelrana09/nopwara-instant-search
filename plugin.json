@@ -2,7 +2,7 @@
   "Group": "Widgets",
   "FriendlyName": "Nopwara instant search",
   "SystemName": "Widgets.NopwaraSearch",
-  "Version": "1.00",
+  "Version": "1.01",
   "SupportedVersions": [ "5.00" ],
   "Author": "Nopwara",
   "DisplayOrder": 1,
